@@ -3,7 +3,7 @@ import pandas as pd
 
 print("Loading Model...")
 
-with open("src/model/bp_model.train.pkl", "rb") as f:
+with open(r"C:\Users\Priyanshu\Predictive_pulse\Predictive_pulse\src\model.pkl", "rb") as f:
     data = pickle.load(f)
 
 model = data["model"]
