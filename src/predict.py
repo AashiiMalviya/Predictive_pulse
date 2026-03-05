@@ -1,44 +1,68 @@
-import pickle
 import pandas as pd
+import pickle
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
 
-print("Loading Model...")
 
-with open(r"C:\Users\Priyanshu\Predictive_pulse\Predictive_pulse\src\model.pkl", "rb") as f:
-    data = pickle.load(f)
+print("Loading Dataset...")
 
-model = data["model"]
-encoders = data["encoders"]
-target_encoder = data["target_encoder"]
+df = pd.read_csv("Data/clean_patient_data.csv")
 
-print("Model Loaded Successfully")
+target = "Stages"
 
-# Example patient input
-patient = {
-    "Gender": "Male",
-    "Age": "35-50",
-    "History": "Yes",
-    "Patient": "No",
-    "TakeMedication": "No",
-    "Severity": "Mild",
-    "BreathShortness": "No",
-    "VisualChanges": "No",
-    "NoseBleeding": "No",
-    "Whendiagnoused": "<1 Year",
-    "Systolic": "111 - 120",
-    "Diastolic": "81 - 90",
-    "ControlledDiet": "No"
+X = df.drop(target, axis=1)
+y = df[target]
+
+encoders = {}
+
+# Encode ONLY categorical columns
+cat_cols = X.select_dtypes(include=['object']).columns
+
+for col in cat_cols:
+    le = LabelEncoder()
+    X[col] = le.fit_transform(X[col])
+    encoders[col] = le
+
+# Encode target
+target_encoder = LabelEncoder()
+y = target_encoder.fit_transform(y)
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+print("Training Model...")
+
+model = RandomForestClassifier(n_estimators=200, random_state=42)
+model.fit(X_train, y_train)
+
+print("Model Trained Successfully")
+
+data = {
+    "model": model,
+    "encoders": encoders,
+    "target_encoder": target_encoder
 }
 
-df = pd.DataFrame([patient])
+with open("src/bp_model.pkl", "wb") as f:
+    pickle.dump(data, f)
 
-# Encode input
-for col in df.columns:
-    le = encoders[col]
-    df[col] = le.transform(df[col])
+print("Model Saved")
 
-# Prediction
-prediction = model.predict(df)
 
-stage = target_encoder.inverse_transform(prediction)
+pred = model.predict(X_test)
+acc = accuracy_score(y_test, pred)
 
-print("Predicted BP Stage:", stage[0])
+print("Model Accuracy:", acc)
+
+cm = confusion_matrix(y_test, pred)
+print(cm)
+
+
+importance = model.feature_importances_
+
+for col, score in zip(X.columns, importance):
+    print(col, ":", score)
