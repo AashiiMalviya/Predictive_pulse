@@ -17,6 +17,7 @@ target = "Stages"
 X = df.drop(target, axis=1)
 y = df[target]
 
+
 # Encode categorical data
 encoders = {}
 
@@ -54,7 +55,7 @@ data = {
     "target_encoder": target_encoder
 }
 
-with open("model/bp_model.pkl", "wb") as f:
+with open("src/bp_model.py", "wb") as f:
     pickle.dump(data, f)
 
-print("Model Saved -> model/bp_model.pkl")
+print("Model Saved -> src/bp_model.py")
