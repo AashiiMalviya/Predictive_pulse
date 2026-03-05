@@ -55,7 +55,7 @@ data = {
     "target_encoder": target_encoder
 }
 
-with open("src/bp_model.py", "wb") as f:
+with open("src/bp_model.pkl", "wb") as f:
     pickle.dump(data, f)
 
-print("Model Saved -> src/bp_model.py")
+print("Model Saved -> src/bp_model.pkl")
