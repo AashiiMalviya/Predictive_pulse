@@ -4,7 +4,7 @@ import numpy as np
 
 app = Flask(__name__)
 
-# Load model
+# Load trained model
 try:
     model = joblib.load("logreg_model.pkl")
 except:
@@ -20,38 +20,62 @@ def home():
 def predict():
 
     if model is None:
-        return render_template("index.html", prediction_text="Model file not found")
+        return render_template("index.html", prediction_text="Error: Model file not found")
 
     try:
-        gender = 1 if request.form.get("Gender") == "Female" else 0
-        age = float(request.form.get("Age"))
-        systolic = float(request.form.get("Systolic"))
-        diastolic = float(request.form.get("Diastolic"))
 
-        history = 1 if request.form.get("History") == "on" else 0
-        breath = 1 if request.form.get("BreathShortness") == "on" else 0
+        features = [[
 
-        features = np.array([[gender, age, systolic, diastolic, history, breath]])
+        1 if request.form.get("Gender")=="Female" else 0,
+
+        float(request.form.get("Age")),
+
+        1 if request.form.get("History")=="on" else 0,
+
+        1 if request.form.get("Patient")=="on" else 0,
+
+        1 if request.form.get("TakeMedication")=="on" else 0,
+
+        float(request.form.get("Severity",0.5)),
+
+        1 if request.form.get("BreathShortness")=="on" else 0,
+
+        1 if request.form.get("VisualChanges")=="on" else 0,
+
+        1 if request.form.get("NoseBleeding")=="on" else 0,
+
+        float(request.form.get("WhenDiagnosed",0.2)),
+
+        float(request.form.get("Systolic")),
+
+        float(request.form.get("Diastolic")),
+
+        1 if request.form.get("ControlledDiet")=="on" else 0
+
+        ]]
 
         prediction = model.predict(features)[0]
 
         stages = {
-            0: "Normal Blood Pressure",
-            1: "Stage 1 Hypertension",
-            2: "Stage 2 Hypertension",
-            3: "Hypertensive Crisis"
+        0:"Normal",
+        1:"Elevated",
+        2:"Stage 1 Hypertension",
+        3:"Stage 2 Hypertension"
         }
 
-        result = stages.get(prediction, "Unknown")
+        result = stages.get(prediction,"Unknown")
 
         return render_template(
-            "index.html",
-            prediction_text=f"Prediction Result: {result}"
+        "index.html",
+        prediction_text=f"Prediction: {result}"
         )
 
     except Exception as e:
-        return render_template("index.html", prediction_text=f"Error: {str(e)}")
+        return render_template(
+        "index.html",
+        prediction_text=f"Error: {str(e)}"
+        )
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    app.run(debug=True)
