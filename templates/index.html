@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <!DOCTYPE html>
 <html>
 
@@ -12,23 +11,36 @@
 
 <body>
 
-    <div class="container">
+    <div class="main">
 
-        <h2>Hypertension Prediction System</h2>
+        <div class="card">
 
-        <form action="/predict" method="post">
+            <div class="heart">❤️</div>
 
-            <input type="text" name="age" placeholder="Age" required>
-            <input type="text" name="bp" placeholder="Blood Pressure" required>
-            <input type="text" name="cholesterol" placeholder="Cholesterol" required>
-            <input type="text" name="bmi" placeholder="BMI" required>
+            <h1>Hypertension Prediction</h1>
 
-            <button type="submit">Predict</button>
+            <div class="pulse"></div>
 
-        </form>
+            <form action="/predict" method="post">
 
-        <div class="result">
-            {{ prediction_text }}
+                <input type="number" name="systolic" placeholder="Systolic BP" required>
+
+                <input type="number" name="non_systolic" placeholder="Non Systolic BP" required>
+
+                <input type="number" name="anemia" placeholder="Anemia (0/1)" required>
+
+                <input type="number" name="non_anemia" placeholder="Non Anemia (0/1)" required>
+
+                <button type="submit">Predict Stage</button>
+
+            </form>
+
+            <div class="result">
+
+                {{ prediction_text }}
+
+            </div>
+
         </div>
 
     </div>

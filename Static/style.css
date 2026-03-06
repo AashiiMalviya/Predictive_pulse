@@ -1,56 +1,114 @@
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: linear-gradient(135deg, #74ebd5, #9face6);
     margin: 0;
-    padding: 0;
+    font-family: Arial;
+    background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+    color: white;
+}
+
+.main {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
 }
 
-.container {
-    background: white;
+.card {
+    background: #ffffff10;
+    backdrop-filter: blur(10px);
     padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    width: 400px;
+    border-radius: 12px;
     text-align: center;
+    width: 420px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-h2 {
-    margin-bottom: 20px;
-    color: #333;
+h1 {
+    margin-bottom: 10px;
+}
+
+/* Pumping heart */
+
+.heart {
+    font-size: 40px;
+    animation: heartbeat 1s infinite;
+}
+
+@keyframes heartbeat {
+    0% {
+        transform: scale(1)
+    }
+
+    25% {
+        transform: scale(1.2)
+    }
+
+    40% {
+        transform: scale(1)
+    }
+
+    60% {
+        transform: scale(1.2)
+    }
+
+    100% {
+        transform: scale(1)
+    }
+}
+
+/* Pulse line animation */
+
+.pulse {
+    height: 4px;
+    background: red;
+    margin: 20px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.pulse::before {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 4px;
+    background: white;
+    animation: pulseMove 2s linear infinite;
+}
+
+@keyframes pulseMove {
+    0% {
+        left: -100px
+    }
+
+    100% {
+        left: 100%
+    }
 }
 
 input {
-    width: 100%;
+    width: 90%;
     padding: 12px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
+    margin: 10px;
+    border: none;
     border-radius: 6px;
-    font-size: 14px;
 }
 
 button {
-    width: 100%;
+    width: 95%;
     padding: 12px;
-    background: #4CAF50;
+    background: #ff4b5c;
     border: none;
+    border-radius: 6px;
     color: white;
     font-size: 16px;
-    border-radius: 6px;
     cursor: pointer;
-    margin-top: 10px;
 }
 
 button:hover {
-    background: #45a049;
+    background: #ff2e43;
 }
 
 .result {
     margin-top: 20px;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
-    color: #333;
 }
