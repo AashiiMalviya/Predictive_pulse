@@ -148,3 +148,4 @@ scaler = MinMaxScaler()
 
 data[ordinal_features] = scaler.fit_transform(data[ordinal_features])
 print(data[ordinal_features].head())
+data.to_csv('clean_patient_data.csv', index=False)

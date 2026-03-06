@@ -1,0 +1,38 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Hypertension Prediction</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h2>Hypertension Prediction System</h2>
+
+        <form action="/predict" method="post">
+
+            <input type="text" name="age" placeholder="Age" required>
+            <input type="text" name="bp" placeholder="Blood Pressure" required>
+            <input type="text" name="cholesterol" placeholder="Cholesterol" required>
+            <input type="text" name="bmi" placeholder="BMI" required>
+
+            <button type="submit">Predict</button>
+
+        </form>
+
+        <div class="result">
+            {{ prediction_text }}
+        </div>
+
+    </div>
+
+</body>
+
+</html>
