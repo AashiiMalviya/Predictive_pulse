@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Predictive Pulse - Hypertension AI</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -59,14 +60,14 @@
 
             <div class="checkbox-group">
 
-                <label>
+                <label class="check-item">
                     <input type="checkbox" name="History">
-                    Family History
+                    <span>Family History</span>
                 </label>
 
-                <label>
+                <label class="check-item">
                     <input type="checkbox" name="BreathShortness">
-                    Shortness of Breath
+                    <span>Shortness of Breath</span>
                 </label>
 
             </div>
@@ -86,6 +87,8 @@
             <h3>{{ prediction_text }}</h3>
         </div>
 
+        <canvas id="bpChart" width="300" height="200"></canvas>
+
         {% endif %}
 
     </div>
@@ -93,3 +96,46 @@
 </body>
 
 </html>
+<script>
+
+    const ctx = document.getElementById('bpChart');
+
+    if (ctx) {
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+
+                labels: ['Normal', 'Elevated', 'Stage 1', 'Stage 2'],
+
+                datasets: [{
+                    label: 'Hypertension Stage',
+
+                    data: [1, 2, 3, 4],
+
+                    backgroundColor: [
+
+                        '#2ecc71',
+                        '#f1c40f',
+                        '#e67e22',
+                        '#e74c3c'
+
+                    ]
+
+                }]
+
+            },
+
+            options: {
+
+                plugins: {
+                    legend: { display: false }
+                }
+
+            }
+
+        });
+
+    }
+
+</script>
