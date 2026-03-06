@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hypertension Prediction</title>
+
+    <!-- CSS Link -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Hypertension Prediction System</h1>
+
+        <!-- Prediction Form -->
+        <form action="{{ url_for('predict') }}" method="POST">
+
+            <label for="Age">Age</label>
+            <input type="number" id="Age" name="Age" required>
+
+            <label for="Systolic">Systolic BP</label>
+            <input type="number" id="Systolic" name="Systolic" required>
+
+            <label for="Diastolic">Diastolic BP</label>
+            <input type="number" id="Diastolic" name="Diastolic" required>
+
+            <button type="submit">Predict</button>
+
+        </form>
+
+        <!-- Prediction Result -->
+        {% if prediction_text %}
+        <div class="result" style="color: {{ result_color }};">
+
+            <h2>{{ prediction_text }}</h2>
+            <p><strong>Confidence:</strong> {{ confidence }}%</p>
+
+        </div>
+        {% endif %}
+
+    </div>
+
+</body>
+
+</html>

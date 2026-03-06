@@ -1,38 +1,55 @@
-
 from flask import Flask, render_template, request
-import pandas as pd
 import pickle
+import numpy as np
 
 app = Flask(__name__)
 
-# Load trained model
-model = pickle.load(open("model/random_forest_model.pkl","rb"))
+# Load Random Forest Model
+model = pickle.load(open("random_forest_model.pkl", "rb"))
+
+# Stage Mapping
+stage_map = {
+    0: "NORMAL",
+    1: "HYPERTENSION (Stage-1)",
+    2: "HYPERTENSION (Stage-2)",
+    3: "HYPERTENSIVE CRISIS"
+}
+
+# Color Mapping
+color_map = {
+    0: "#10B981",
+    1: "#F59E0B",
+    2: "#F97316",
+    3: "#EF4444"
+}
 
 @app.route("/")
 def home():
     return render_template("index.html")
 
+
 @app.route("/predict", methods=["POST"])
 def predict():
 
-    systolic = float(request.form["systolic"])
-    non_systolic = float(request.form["non_systolic"])
-    anemia = float(request.form["anemia"])
-    non_anemia = float(request.form["non_anemia"])
+    age = int(request.form["Age"])
+    systolic = int(request.form["Systolic"])
+    diastolic = int(request.form["Diastolic"])
 
-    data = [[systolic, non_systolic, anemia, non_anemia]]
+    input_data = np.array([[age, systolic, diastolic]])
 
-    columns = ["systolic","non_systolic","anemia","non_anemia"]
+    prediction = model.predict(input_data)[0]
+    confidence = max(model.predict_proba(input_data)[0]) * 100
 
-    df = pd.DataFrame(data, columns=columns)
-
-    prediction = model.predict(df)
-
+    result = stage_map[prediction]
+    color = color_map[prediction]
 
     return render_template(
         "index.html",
-        prediction_text=f"Predicted Hypertension Stage : {prediction[0]}"
+        prediction_text=result,
+        result_color=color,
+        confidence=round(confidence,2)
     )
+
 
 if __name__ == "__main__":
     app.run(debug=True)
