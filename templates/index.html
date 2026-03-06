@@ -1,33 +1,64 @@
-body{
-font-family: Arial;
-background: #f4f4f4;
-text-align: center;
-}
+<!DOCTYPE html>
+<html lang="en">
 
-.container{
-background: white;
-width: 400px;
-margin: 80px auto;
-padding: 20px;
-border-radius: 10px;
-box-shadow: 0px 0px 10px gray;
-}
+<head>
 
-input{
-width: 90%;
-padding: 10px;
-margin: 10px;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-button{
-padding: 10px 20px;
-background: green;
-color: white;
-border: none;
-cursor: pointer;
-}
+    <title>Hypertension Detection</title>
 
-.result{
-margin-top: 20px;
-font-size: 20px;
-}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <header class="header">
+        <h1>Hypertension Detection</h1>
+        <p>AI-Powered Cardiovascular Risk Assessment</p>
+    </header>
+
+    <div class="container">
+
+        <form action="/predict" method="POST">
+
+            <label for="Gender">Gender</label>
+            <select name="Gender" id="Gender" required>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+
+            <label for="Age">Age</label>
+            <input type="number" name="Age" id="Age" required>
+
+            <label for="Systolic">Systolic Pressure</label>
+            <input type="number" name="Systolic" id="Systolic" required>
+
+            <label for="Diastolic">Diastolic Pressure</label>
+            <input type="number" name="Diastolic" id="Diastolic" required>
+
+            <button type="submit">Generate Risk Assessment</button>
+
+        </form>
+
+        <!-- Prediction Result -->
+
+        {% if prediction_text %}
+
+        <div class="result" style="border-left: 6px solid {{ result_color }};">
+
+            <h2 style="color:{{ result_color }}">{{ prediction_text }}</h2>
+
+            <p>Confidence: {{ confidence }}%</p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</body>
+
+</html>
