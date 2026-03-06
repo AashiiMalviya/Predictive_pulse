@@ -2,57 +2,60 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictive Pulse - Hypertension AI</title>
 
-    <title>Hypertension Detection</title>
-
+    <!-- CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
 </head>
 
 <body>
 
-    <header class="header">
-        <h1>Hypertension Detection</h1>
-        <p>AI-Powered Cardiovascular Risk Assessment</p>
-    </header>
-
     <div class="container">
 
+        <h2>Hypertension Stage Prediction</h2>
+
+        <!-- Prediction Form -->
         <form action="/predict" method="POST">
 
-            <label for="Gender">Gender</label>
-            <select name="Gender" id="Gender" required>
-                <option value="">Select Gender</option>
+            <label for="gender">Gender</label>
+            <select name="Gender" id="gender">
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
             </select>
 
-            <label for="Age">Age</label>
-            <input type="number" name="Age" id="Age" required>
+            <label for="age">Age</label>
+            <input type="number" name="Age" id="age" placeholder="e.g. 45" required>
 
-            <label for="Systolic">Systolic Pressure</label>
-            <input type="number" name="Systolic" id="Systolic" required>
+            <label for="systolic">Systolic Pressure (mmHg)</label>
+            <input type="number" name="Systolic" id="systolic" placeholder="e.g. 130" required>
 
-            <label for="Diastolic">Diastolic Pressure</label>
-            <input type="number" name="Diastolic" id="Diastolic" required>
+            <label for="diastolic">Diastolic Pressure (mmHg)</label>
+            <input type="number" name="Diastolic" id="diastolic" placeholder="e.g. 85" required>
 
-            <button type="submit">Generate Risk Assessment</button>
+            <div class="checkbox-group">
+
+                <label>
+                    <input type="checkbox" name="History">
+                    Family History
+                </label>
+
+                <label>
+                    <input type="checkbox" name="BreathShortness">
+                    Shortness of Breath
+                </label>
+
+            </div>
+
+            <button type="submit">Predict Stage</button>
 
         </form>
 
         <!-- Prediction Result -->
-
         {% if prediction_text %}
 
-        <div class="result" style="border-left: 6px solid {{ result_color }};">
-
-            <h2 style="color:{{ result_color }}">{{ prediction_text }}</h2>
-
-            <p>Confidence: {{ confidence }}%</p>
-
+        <div class="result {{ result_color }}">
+            <h3>{{ prediction_text }}</h3>
         </div>
 
         {% endif %}
