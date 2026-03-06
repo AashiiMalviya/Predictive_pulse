@@ -17,6 +17,17 @@
 
         <!-- Heart Animation -->
         <div class="heart"></div>
+        <div class="gauge">
+
+            <div class="gauge-body">
+
+                <div class="gauge-fill"></div>
+
+                <div class="gauge-cover">BP</div>
+
+            </div>
+
+        </div>
 
         <!-- Running Pulse Line -->
         <div class="pulse-line">
@@ -43,6 +54,9 @@
             <label>Diastolic Pressure</label>
             <input type="number" name="Diastolic" required>
 
+
+            </label>
+
             <div class="checkbox-group">
 
                 <label>
@@ -58,6 +72,11 @@
             </div>
 
             <button type="submit">Predict Stage</button>
+            <div id="loading" style="display:none;text-align:center;margin-top:20px;">
+
+                AI analyzing patient data...
+
+            </div>
 
         </form>
 
