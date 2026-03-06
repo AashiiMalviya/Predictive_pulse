@@ -4,8 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Predictive Pulse - Hypertension AI</title>
-
-    <!-- CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
@@ -15,23 +13,28 @@
 
         <h2>Hypertension Stage Prediction</h2>
 
-        <!-- Prediction Form -->
         <form action="/predict" method="POST">
 
-            <label for="gender">Gender</label>
-            <select name="Gender" id="gender">
+            <label>Gender</label>
+            <select name="Gender">
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
             </select>
 
-            <label for="age">Age</label>
-            <input type="number" name="Age" id="age" placeholder="e.g. 45" required>
+            <label>Age</label>
+            <input type="number" name="Age" required>
 
-            <label for="systolic">Systolic Pressure (mmHg)</label>
-            <input type="number" name="Systolic" id="systolic" placeholder="e.g. 130" required>
+            <label>Systolic Pressure</label>
+            <input type="number" name="Systolic" required>
 
-            <label for="diastolic">Diastolic Pressure (mmHg)</label>
-            <input type="number" name="Diastolic" id="diastolic" placeholder="e.g. 85" required>
+            <label>Diastolic Pressure</label>
+            <input type="number" name="Diastolic" required>
+
+            <label>Severity</label>
+            <input type="number" step="0.1" name="Severity">
+
+            <label>When Diagnosed (years)</label>
+            <input type="number" step="0.1" name="WhenDiagnosed">
 
             <div class="checkbox-group">
 
@@ -41,8 +44,33 @@
                 </label>
 
                 <label>
+                    <input type="checkbox" name="Patient">
+                    Currently Patient
+                </label>
+
+                <label>
+                    <input type="checkbox" name="TakeMedication">
+                    Taking Medication
+                </label>
+
+                <label>
                     <input type="checkbox" name="BreathShortness">
                     Shortness of Breath
+                </label>
+
+                <label>
+                    <input type="checkbox" name="VisualChanges">
+                    Visual Changes
+                </label>
+
+                <label>
+                    <input type="checkbox" name="NoseBleeding">
+                    Nose Bleeding
+                </label>
+
+                <label>
+                    <input type="checkbox" name="ControlledDiet">
+                    Controlled Diet
                 </label>
 
             </div>
@@ -51,13 +79,10 @@
 
         </form>
 
-        <!-- Prediction Result -->
         {% if prediction_text %}
-
-        <div class="result {{ result_color }}">
+        <div class="result">
             <h3>{{ prediction_text }}</h3>
         </div>
-
         {% endif %}
 
     </div>
