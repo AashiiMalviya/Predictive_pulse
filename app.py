@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template, request
 import pandas as pd
 import pickle
@@ -26,6 +27,7 @@ def predict():
     df = pd.DataFrame(data, columns=columns)
 
     prediction = model.predict(df)
+
 
     return render_template(
         "index.html",
