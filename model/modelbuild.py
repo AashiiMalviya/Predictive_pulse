@@ -1,3 +1,6 @@
+# Predictive Pulse - Blood Pressure Prediction System
+# Model Training Script
+# Developed by: Vikram Yadav
 import pandas as pd
 import joblib
 
@@ -7,7 +10,7 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 
 
 # Load dataset
-data = pd.read_csv(r'C:\Users\Priyanshu\Predictive_pulse\data\clean_patient_data.csv')
+data = pd.read_csv("../Data/clean_patient_data.csv")
 
 # Remove missing values
 data = data.dropna()
