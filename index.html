@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
 
-    <meta charset="UTF-8">
     <title>Hypertension Detection</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -12,102 +11,126 @@
 
 <body>
 
-    <div class="container">
+    <header>
 
         <h1>Hypertension Detection</h1>
+        <p>Advanced AI-Powered Cardiovascular Risk Assessment Platform</p>
 
-        <form action="/predict" method="POST">
+    </header>
 
-            <div class="grid">
+    <div class="main">
 
-                <select name="gender">
-                    <option value="0">Male</option>
-                    <option value="1">Female</option>
-                </select>
+        <div class="form-card">
 
-                <select name="age">
-                    <option value="0">18-34</option>
-                    <option value="1">35-50</option>
-                    <option value="2">51-64</option>
-                    <option value="3">65+</option>
-                </select>
+            <h2>Comprehensive Health Assessment</h2>
 
-                <select name="family_history">
-                    <option value="0">No Family History</option>
-                    <option value="1">Yes</option>
-                </select>
+            <form action="/predict" method="POST">
 
-                <select name="medical_care">
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
+                <div class="grid">
 
-                <select name="bp_med">
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
+                    <select name="gender">
+                        <option value="0">Select Gender</option>
+                        <option value="1">Male</option>
+                        <option value="2">Female</option>
+                    </select>
 
-                <select name="symptom">
-                    <option value="0">Mild</option>
-                    <option value="1">Moderate</option>
-                    <option value="2">Severe</option>
-                </select>
+                    <input type="number" name="age" placeholder="Age">
 
-                <select name="breath">
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
+                    <select name="family">
+                        <option value="0">Family History</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
 
-                <select name="vision">
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
+                    <select name="medical">
+                        <option value="0">Under Medical Care</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
 
-                <select name="nosebleed">
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
+                    <select name="medicine">
+                        <option value="0">BP Medication</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
 
-                <select name="diagnosis">
-                    <option value="0">Less than 1 year</option>
-                    <option value="1">1-5 years</option>
-                    <option value="2">5+ years</option>
-                </select>
+                    <select name="severity">
+                        <option value="0">Symptom Severity</option>
+                        <option value="1">Mild</option>
+                        <option value="2">Severe</option>
+                    </select>
 
-                <select name="systolic">
-                    <option value="0">Normal</option>
-                    <option value="1">Stage 1</option>
-                    <option value="2">Stage 2</option>
-                </select>
+                    <select name="breath">
+                        <option value="0">Shortness Breath</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
 
-                <select name="diastolic">
-                    <option value="0">Normal</option>
-                    <option value="1">Stage 1</option>
-                    <option value="2">Stage 2</option>
-                </select>
+                    <select name="vision">
+                        <option value="0">Vision Change</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
 
-                <select name="diet">
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
+                    <select name="nose">
+                        <option value="0">Frequent Nosebleed</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+
+                    <select name="time">
+                        <option value="0">Diagnosis Time</option>
+                        <option value="1">Less 1 Year</option>
+                        <option value="2">1-5 Years</option>
+                    </select>
+
+                    <input type="number" name="systolic" placeholder="Systolic Pressure">
+
+                    <input type="number" name="diastolic" placeholder="Diastolic Pressure">
+
+                    <select name="diet">
+                        <option value="0">Heart Healthy Diet</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+
+                </div>
+
+                <button type="submit">Generate Risk Assessment</button>
+
+            </form>
+
+            {% if prediction %}
+
+            <div class="result">
+
+                <h2>{{ prediction }}</h2>
 
             </div>
 
-            <button type="submit">Generate Risk Assessment</button>
-
-        </form>
-
-        {% if prediction_text %}
-
-        <div class="result">
-
-            <h2>{{ prediction_text }}</h2>
-
-            <p>Risk Level: {{ risk }}</p>
+            {% endif %}
 
         </div>
 
-        {% endif %}
+        <div class="info">
+
+            <h3>About This System</h3>
+
+            <p>
+                Our AI-powered platform analyzes multiple cardiovascular risk
+                factors using machine learning algorithms trained on clinical data.
+            </p>
+
+            <ul>
+
+                <li>Evidence-based risk assessment</li>
+                <li>Clinical guideline compliance</li>
+                <li>Personalized recommendations</li>
+                <li>Professional medical support</li>
+
+            </ul>
+
+        </div>
 
     </div>
 

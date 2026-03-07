@@ -1,61 +1,74 @@
 from flask import Flask, render_template, request
-import joblib
 import numpy as np
+import joblib
 
 app = Flask(__name__)
 
-# Load ML model
+# Load trained model
 model = joblib.load("logreg_model.pkl")
 
-# Stage Mapping
+# Hypertension stage mapping
 stage_map = {
     0: ("Normal Blood Pressure", "LOW RISK"),
     1: ("Stage 1 Hypertension", "MODERATE RISK"),
-    2: ("Stage 2 Hypertension", "HIGH RISK"),
-    3: ("Hypertensive Crisis", "EMERGENCY")
+    2: ("Stage 2 Hypertension", "HIGH RISK")
 }
 
 @app.route("/")
 def home():
-    return render_template("index.html", prediction=None)
+    return render_template("index.html")
+
 
 @app.route("/predict", methods=["POST"])
 def predict():
 
     try:
-        features = [
-            int(request.form["gender"]),
-            int(request.form["age"]),
-            int(request.form["family_history"]),
-            int(request.form["medical_care"]),
-            int(request.form["bp_med"]),
-            int(request.form["symptom"]),
-            int(request.form["breath"]),
-            int(request.form["vision"]),
-            int(request.form["nosebleed"]),
-            int(request.form["diagnosis"]),
-            int(request.form["systolic"]),
-            int(request.form["diastolic"]),
-            int(request.form["diet"])
-        ]
+        age = int(request.form["age"])
+        gender = int(request.form["gender"])
+        family_history = int(request.form["family_history"])
+        medication = int(request.form["medication"])
+        severity = int(request.form["severity"])
+        breath = int(request.form["breath"])
+        vision = int(request.form["vision"])
+        nosebleed = int(request.form["nosebleed"])
+        diagnosis_time = int(request.form["diagnosis_time"])
+        systolic = int(request.form["systolic"])
+        diastolic = int(request.form["diastolic"])
+        diet = int(request.form["diet"])
+        medical_care = int(request.form["medical_care"])
 
-        final = np.array([features])
+        features = np.array([[
 
-        prediction = model.predict(final)[0]
+            age,
+            gender,
+            family_history,
+            medication,
+            severity,
+            breath,
+            vision,
+            nosebleed,
+            diagnosis_time,
+            systolic,
+            diastolic,
+            diet,
+            medical_care
 
-        stage, risk = stage_map[prediction]
+        ]])
+
+        prediction = model.predict(features)[0]
+
+        result, risk = stage_map[prediction]
 
         return render_template(
             "index.html",
-            prediction_text=stage,
+            prediction_text=result,
             risk=risk
         )
 
     except:
         return render_template(
             "index.html",
-            prediction_text="Error in Prediction",
-            risk="Check Inputs"
+            prediction_text="Error in Prediction"
         )
 
 
