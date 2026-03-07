@@ -1,84 +1,61 @@
 from flask import Flask, render_template, request
 import joblib
+import numpy as np
 
 app = Flask(__name__)
 
-# Load model
-try:
-    model = joblib.load("logreg_model.pkl")
-except:
-    model = None
+# Load ML model
+model = joblib.load("logreg_model.pkl")
 
+# Stage Mapping
+stage_map = {
+    0: ("Normal Blood Pressure", "LOW RISK"),
+    1: ("Stage 1 Hypertension", "MODERATE RISK"),
+    2: ("Stage 2 Hypertension", "HIGH RISK"),
+    3: ("Hypertensive Crisis", "EMERGENCY")
+}
 
 @app.route("/")
 def home():
-    return render_template("index.html")
-
+    return render_template("index.html", prediction=None)
 
 @app.route("/predict", methods=["POST"])
 def predict():
 
-    if model is None:
-        return render_template("index.html", prediction_text="Model not found")
-
     try:
+        features = [
+            int(request.form["gender"]),
+            int(request.form["age"]),
+            int(request.form["family_history"]),
+            int(request.form["medical_care"]),
+            int(request.form["bp_med"]),
+            int(request.form["symptom"]),
+            int(request.form["breath"]),
+            int(request.form["vision"]),
+            int(request.form["nosebleed"]),
+            int(request.form["diagnosis"]),
+            int(request.form["systolic"]),
+            int(request.form["diastolic"]),
+            int(request.form["diet"])
+        ]
 
-        gender = 1 if request.form.get("Gender") == "Female" else 0
-        age = float(request.form.get("Age", 0))
+        final = np.array([features])
 
-        history = 1 if request.form.get("History") == "on" else 0
-        patient = 1 if request.form.get("Patient") == "on" else 0
-        medication = 1 if request.form.get("TakeMedication") == "on" else 0
+        prediction = model.predict(final)[0]
 
-        severity = float(request.form.get("Severity", 0.5))
-
-        breath = 1 if request.form.get("BreathShortness") == "on" else 0
-        visual = 1 if request.form.get("VisualChanges") == "on" else 0
-        nose = 1 if request.form.get("NoseBleeding") == "on" else 0
-
-        diagnosed = float(request.form.get("WhenDiagnosed", 0.2))
-
-        systolic = float(request.form.get("Systolic", 0))
-        diastolic = float(request.form.get("Diastolic", 0))
-
-        diet = 1 if request.form.get("ControlledDiet") == "on" else 0
-
-        features = [[
-            gender,
-            age,
-            history,
-            patient,
-            medication,
-            severity,
-            breath,
-            visual,
-            nose,
-            diagnosed,
-            systolic,
-            diastolic,
-            diet
-        ]]
-
-        prediction = model.predict(features)[0]
-
-        stages = {
-            0: "Normal",
-            1: "Elevated",
-            2: "Stage 1 Hypertension",
-            3: "Stage 2 Hypertension"
-        }
-
-        result = stages.get(prediction, "Unknown")
+        stage, risk = stage_map[prediction]
 
         return render_template(
             "index.html",
-            prediction_text=f"Prediction: {result}"
+            prediction_text=stage,
+            risk=risk
         )
 
-    except Exception as e:
+    except:
         return render_template(
             "index.html",
-            prediction_text=f"Error: {str(e)}"
+            prediction_text="Error in Prediction",
+            risk="Check Inputs"
         )
 
 

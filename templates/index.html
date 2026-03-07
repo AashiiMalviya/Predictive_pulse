@@ -2,9 +2,9 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <title>Predictive Pulse - Hypertension AI</title>
+    <title>Hypertension Detection</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
@@ -14,80 +14,98 @@
 
     <div class="container">
 
-        <h2>Predictive Pulse - Hypertension AI</h2>
-
-        <!-- Heart Animation -->
-        <div class="heart"></div>
-        <div class="gauge">
-
-            <div class="gauge-body">
-
-                <div class="gauge-fill"></div>
-
-                <div class="gauge-cover">BP</div>
-
-            </div>
-
-        </div>
-
-        <!-- Running Pulse Line -->
-        <div class="pulse-line">
-            <svg viewBox="0 0 200 40">
-                <polyline fill="none" stroke="#ff3b3b" stroke-width="3"
-                    points="0,20 20,20 30,5 40,35 50,20 70,20 80,10 90,30 100,20 200,20" />
-            </svg>
-        </div>
+        <h1>Hypertension Detection</h1>
 
         <form action="/predict" method="POST">
 
-            <label>Gender</label>
-            <select name="Gender">
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-            </select>
+            <div class="grid">
 
-            <label>Age</label>
-            <input type="number" name="Age" required>
+                <select name="gender">
+                    <option value="0">Male</option>
+                    <option value="1">Female</option>
+                </select>
 
-            <label>Systolic Pressure</label>
-            <input type="number" name="Systolic" required>
+                <select name="age">
+                    <option value="0">18-34</option>
+                    <option value="1">35-50</option>
+                    <option value="2">51-64</option>
+                    <option value="3">65+</option>
+                </select>
 
-            <label>Diastolic Pressure</label>
-            <input type="number" name="Diastolic" required>
+                <select name="family_history">
+                    <option value="0">No Family History</option>
+                    <option value="1">Yes</option>
+                </select>
 
+                <select name="medical_care">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
 
-            </label>
+                <select name="bp_med">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
 
-            <div class="checkbox-group">
+                <select name="symptom">
+                    <option value="0">Mild</option>
+                    <option value="1">Moderate</option>
+                    <option value="2">Severe</option>
+                </select>
 
-                <label class="check-item">
-                    <input type="checkbox" name="History">
-                    <span>Family History</span>
-                </label>
+                <select name="breath">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
 
-                <label class="check-item">
-                    <input type="checkbox" name="BreathShortness">
-                    <span>Shortness of Breath</span>
-                </label>
+                <select name="vision">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+
+                <select name="nosebleed">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+
+                <select name="diagnosis">
+                    <option value="0">Less than 1 year</option>
+                    <option value="1">1-5 years</option>
+                    <option value="2">5+ years</option>
+                </select>
+
+                <select name="systolic">
+                    <option value="0">Normal</option>
+                    <option value="1">Stage 1</option>
+                    <option value="2">Stage 2</option>
+                </select>
+
+                <select name="diastolic">
+                    <option value="0">Normal</option>
+                    <option value="1">Stage 1</option>
+                    <option value="2">Stage 2</option>
+                </select>
+
+                <select name="diet">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
 
             </div>
 
-            <button type="submit">Predict Stage</button>
-            <div id="loading" style="display:none;text-align:center;margin-top:20px;">
-
-                AI analyzing patient data...
-
-            </div>
+            <button type="submit">Generate Risk Assessment</button>
 
         </form>
 
         {% if prediction_text %}
 
         <div class="result">
-            <h3>{{ prediction_text }}</h3>
-        </div>
 
-        <canvas id="bpChart" width="300" height="200"></canvas>
+            <h2>{{ prediction_text }}</h2>
+
+            <p>Risk Level: {{ risk }}</p>
+
+        </div>
 
         {% endif %}
 
@@ -96,46 +114,3 @@
 </body>
 
 </html>
-<script>
-
-    const ctx = document.getElementById('bpChart');
-
-    if (ctx) {
-
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-
-                labels: ['Normal', 'Elevated', 'Stage 1', 'Stage 2'],
-
-                datasets: [{
-                    label: 'Hypertension Stage',
-
-                    data: [1, 2, 3, 4],
-
-                    backgroundColor: [
-
-                        '#2ecc71',
-                        '#f1c40f',
-                        '#e67e22',
-                        '#e74c3c'
-
-                    ]
-
-                }]
-
-            },
-
-            options: {
-
-                plugins: {
-                    legend: { display: false }
-                }
-
-            }
-
-        });
-
-    }
-
-</script>
