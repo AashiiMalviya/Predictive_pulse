@@ -126,3 +126,5 @@ The Logistic Regression model is trained on the processed dataset and evaluated 
 
 Priyanshu Tiwari
 B.Tech AI / ML Engineer
+Vikram Yadav 
+B. Tech (CSE)
