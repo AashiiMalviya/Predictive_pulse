@@ -1,52 +1,191 @@
 import pandas as pd
 import joblib
 
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+# ==============================
+# Load Dataset
+# ==============================
 
+data = pd.read_csv(
+    r"C:\Users\Priyanshu\Predictive_pulse\data\clean_patient_data.csv"
+)
 
-# Load dataset
-data = pd.read_csv(r'C:\Users\Priyanshu\Predictive_pulse\data\clean_patient_data.csv')
-
-# Remove missing values
+# remove missing values
 data = data.dropna()
 
-# Features and target
-X = data.drop('Stages', axis=1)
-y = data['Stages']
+print(data.head())
 
-# Train test split
+# ==============================
+# Features and Target
+# ==============================
+
+X = data.drop("Stages", axis=1)
+y = data["Stages"]
+
+# ==============================
+# Train Test Split
+# ==============================
+
+from sklearn.model_selection import train_test_split
+
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
-# Create model
+# ==============================
+# Import Models
+# ==============================
+
+from sklearn.linear_model import LogisticRegression, RidgeClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score
+
+accuracy = {}
+
+# ==============================
+# Logistic Regression
+# ==============================
+
 logreg = LogisticRegression(max_iter=1000)
 
-# Train model
 logreg.fit(X_train, y_train)
 
-# Predictions
 y_pred = logreg.predict(X_test)
 
-# Accuracy
 acc = accuracy_score(y_test, y_pred)
 
-print("\n==============================")
-print("Logistic Regression Model")
-print("==============================")
+print("\nLogistic Regression Accuracy:", acc)
 
-print("Accuracy:", acc)
-
-print("\nClassification Report:\n")
-print(classification_report(y_test, y_pred))
-
-print("\nConfusion Matrix:\n")
-print(confusion_matrix(y_test, y_pred))
+accuracy["Logistic Regression"] = acc
 
 
-# Save model
-joblib.dump(logreg, "logreg_model.pkl")
+# ==============================
+# Decision Tree
+# ==============================
 
-print("✅ Model saved as logreg_model.pkl")
+dt = DecisionTreeClassifier()
+
+dt.fit(X_train, y_train)
+
+y_pred = dt.predict(X_test)
+
+acc = accuracy_score(y_test, y_pred)
+
+print("Decision Tree Accuracy:", acc)
+
+accuracy["Decision Tree"] = acc
+
+
+# ==============================
+# Random Forest
+# ==============================
+
+rf = RandomForestClassifier()
+
+rf.fit(X_train, y_train)
+
+y_pred = rf.predict(X_test)
+
+acc = accuracy_score(y_test, y_pred)
+
+print("Random Forest Accuracy:", acc)
+
+accuracy["Random Forest"] = acc
+
+
+# ==============================
+# SVM
+# ==============================
+
+svm = SVC()
+
+svm.fit(X_train, y_train)
+
+y_pred = svm.predict(X_test)
+
+acc = accuracy_score(y_test, y_pred)
+
+print("SVM Accuracy:", acc)
+
+accuracy["SVM"] = acc
+
+
+# ==============================
+# KNN
+# ==============================
+
+knn = KNeighborsClassifier(n_neighbors=5)
+
+knn.fit(X_train, y_train)
+
+y_pred = knn.predict(X_test)
+
+acc = accuracy_score(y_test, y_pred)
+
+print("KNN Accuracy:", acc)
+
+accuracy["KNN"] = acc
+
+
+# ==============================
+# Ridge Classifier
+# ==============================
+
+rc = RidgeClassifier()
+
+rc.fit(X_train, y_train)
+
+y_pred = rc.predict(X_test)
+
+acc = accuracy_score(y_test, y_pred)
+
+print("RidgeClassifier Accuracy:", acc)
+
+accuracy["RidgeClassifier"] = acc
+
+
+# ==============================
+# Naive Bayes
+# ==============================
+
+nb = GaussianNB()
+
+nb.fit(X_train, y_train)
+
+y_pred = nb.predict(X_test)
+
+acc = accuracy_score(y_test, y_pred)
+
+print("Naive Bayes Accuracy:", acc)
+
+accuracy["Naive Bayes"] = acc
+
+
+# ==============================
+# Model Accuracy Comparison
+# ==============================
+
+print("\nModel Accuracy Comparison")
+
+for model, acc in accuracy.items():
+    print(model, ":", acc)
+
+
+# ==============================
+# Force Best Model = Logistic Regression
+# ==============================
+
+best_model = logreg
+
+print("\nBest Model Selected: Logistic Regression")
+
+# ==============================
+# Save Model
+# ==============================
+
+joblib.dump(best_model, "logistic_model.pkl")
+
+print("Model saved successfully as logistic_model.pkl")

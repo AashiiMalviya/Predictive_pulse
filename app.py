@@ -5,13 +5,14 @@ import joblib
 app = Flask(__name__)
 
 # Load trained model
-model = joblib.load("logreg_model.pkl")
+model = joblib.load("logistic_model.pkl")
 
-# Hypertension stage mapping
+# Stage mapping
 stage_map = {
-    0: ("Normal Blood Pressure", "LOW RISK"),
-    1: ("Stage 1 Hypertension", "MODERATE RISK"),
-    2: ("Stage 2 Hypertension", "HIGH RISK")
+    0: "Normal Blood Pressure",
+    1: "Stage 1 Hypertension",
+    2: "Stage 2 Hypertension",
+    3: "Hypertension Crisis"
 }
 
 @app.route("/")
@@ -22,54 +23,44 @@ def home():
 @app.route("/predict", methods=["POST"])
 def predict():
 
-    try:
-        age = int(request.form["age"])
-        gender = int(request.form["gender"])
-        family_history = int(request.form["family_history"])
-        medication = int(request.form["medication"])
-        severity = int(request.form["severity"])
-        breath = int(request.form["breath"])
-        vision = int(request.form["vision"])
-        nosebleed = int(request.form["nosebleed"])
-        diagnosis_time = int(request.form["diagnosis_time"])
-        systolic = int(request.form["systolic"])
-        diastolic = int(request.form["diastolic"])
-        diet = int(request.form["diet"])
-        medical_care = int(request.form["medical_care"])
+    # safe input handling
+    gender = int(request.form.get("gender", 0))
+    age = int(request.form.get("age", 0))
+    family = int(request.form.get("family", 0))
+    medical = int(request.form.get("medical", 0))
+    medicine = int(request.form.get("medicine", 0))
+    severity = int(request.form.get("severity", 0))
+    breath = int(request.form.get("breath", 0))
+    vision = int(request.form.get("vision", 0))
+    nose = int(request.form.get("nose", 0))
+    time = int(request.form.get("time", 0))
+    systolic = int(request.form.get("systolic", 0))
+    diastolic = int(request.form.get("diastolic", 0))
+    diet = int(request.form.get("diet", 0))
 
-        features = np.array([[
+    # Create feature array
+    features = np.array([[
+        gender,
+        age,
+        family,
+        medical,
+        medicine,
+        severity,
+        breath,
+        vision,
+        nose,
+        time,
+        systolic,
+        diastolic,
+        diet
+    ]])
 
-            age,
-            gender,
-            family_history,
-            medication,
-            severity,
-            breath,
-            vision,
-            nosebleed,
-            diagnosis_time,
-            systolic,
-            diastolic,
-            diet,
-            medical_care
+    # Prediction
+    prediction = int(model.predict(features)[0])
 
-        ]])
+    result = stage_map.get(prediction, "Unknown")
 
-        prediction = model.predict(features)[0]
-
-        result, risk = stage_map[prediction]
-
-        return render_template(
-            "index.html",
-            prediction_text=result,
-            risk=risk
-        )
-
-    except:
-        return render_template(
-            "index.html",
-            prediction_text="Error in Prediction"
-        )
+    return render_template("index.html", prediction=result)
 
 
 if __name__ == "__main__":
