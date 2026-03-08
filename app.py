@@ -1,3 +1,7 @@
+# Predictive Pulse - Blood Pressure Prediction System
+# ML Model Training & Deployment: Vikram Yadav
+# Flask Integration: Team Project
+
 from flask import Flask, render_template, request
 import numpy as np
 import joblib
@@ -15,6 +19,7 @@ stage_map = {
     3: "Hypertension Crisis"
 }
 
+
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -23,7 +28,6 @@ def home():
 @app.route("/predict", methods=["POST"])
 def predict():
 
-    # safe input handling
     gender = int(request.form.get("gender", 0))
     age = int(request.form.get("age", 0))
     family = int(request.form.get("family", 0))
@@ -55,9 +59,10 @@ def predict():
         diet
     ]])
 
-    # Prediction
+    # Predict
     prediction = int(model.predict(features)[0])
 
+    # Map stage
     result = stage_map.get(prediction, "Unknown")
 
     return render_template("index.html", prediction=result)

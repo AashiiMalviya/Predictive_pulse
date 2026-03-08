@@ -1,3 +1,7 @@
+# Predictive Pulse - Blood Pressure Prediction System
+# Model Training Script
+# Developed by: Vikram Yadav
+
 import pandas as pd
 import joblib
 
@@ -9,7 +13,7 @@ data = pd.read_csv(
     r"C:\Users\Priyanshu\Predictive_pulse\data\clean_patient_data.csv"
 )
 
-# remove missing values
+# Remove missing values
 data = data.dropna()
 
 print(data.head())
@@ -50,7 +54,6 @@ accuracy = {}
 # ==============================
 
 logreg = LogisticRegression(max_iter=1000)
-
 logreg.fit(X_train, y_train)
 
 y_pred = logreg.predict(X_test)
@@ -61,13 +64,11 @@ print("\nLogistic Regression Accuracy:", acc)
 
 accuracy["Logistic Regression"] = acc
 
-
 # ==============================
 # Decision Tree
 # ==============================
 
 dt = DecisionTreeClassifier()
-
 dt.fit(X_train, y_train)
 
 y_pred = dt.predict(X_test)
@@ -78,13 +79,11 @@ print("Decision Tree Accuracy:", acc)
 
 accuracy["Decision Tree"] = acc
 
-
 # ==============================
 # Random Forest
 # ==============================
 
 rf = RandomForestClassifier()
-
 rf.fit(X_train, y_train)
 
 y_pred = rf.predict(X_test)
@@ -95,13 +94,11 @@ print("Random Forest Accuracy:", acc)
 
 accuracy["Random Forest"] = acc
 
-
 # ==============================
 # SVM
 # ==============================
 
 svm = SVC()
-
 svm.fit(X_train, y_train)
 
 y_pred = svm.predict(X_test)
@@ -112,13 +109,11 @@ print("SVM Accuracy:", acc)
 
 accuracy["SVM"] = acc
 
-
 # ==============================
 # KNN
 # ==============================
 
 knn = KNeighborsClassifier(n_neighbors=5)
-
 knn.fit(X_train, y_train)
 
 y_pred = knn.predict(X_test)
@@ -129,13 +124,11 @@ print("KNN Accuracy:", acc)
 
 accuracy["KNN"] = acc
 
-
 # ==============================
 # Ridge Classifier
 # ==============================
 
 rc = RidgeClassifier()
-
 rc.fit(X_train, y_train)
 
 y_pred = rc.predict(X_test)
@@ -146,13 +139,11 @@ print("RidgeClassifier Accuracy:", acc)
 
 accuracy["RidgeClassifier"] = acc
 
-
 # ==============================
 # Naive Bayes
 # ==============================
 
 nb = GaussianNB()
-
 nb.fit(X_train, y_train)
 
 y_pred = nb.predict(X_test)
@@ -163,7 +154,6 @@ print("Naive Bayes Accuracy:", acc)
 
 accuracy["Naive Bayes"] = acc
 
-
 # ==============================
 # Model Accuracy Comparison
 # ==============================
@@ -172,7 +162,6 @@ print("\nModel Accuracy Comparison")
 
 for model, acc in accuracy.items():
     print(model, ":", acc)
-
 
 # ==============================
 # Force Best Model = Logistic Regression
